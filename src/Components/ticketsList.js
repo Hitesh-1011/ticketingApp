@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import CreateTicket from "./createTicketForm.js";
 
 export default function TicketsList() {
-  const [tickets, setTickets] = useState("");
+  const [tickets, setTickets] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [numberOfTcikets, setNumberOfTickets] = useState(0);
 
   const selectedTicketData = useSelector(
     (state) => state.ticketsStateManager.selectedTicket
@@ -19,14 +21,41 @@ export default function TicketsList() {
   const ticketAddedTrigger = useSelector(
     (state) => state.ticketsStateManager.ticketAddedTigger
   );
-  
+
   useEffect(() => {
     // Load data from local storage when component mounts
-    const storedTickets = localStorage.getItem("tickets");
+    const storedTickets = JSON.parse(localStorage.getItem("tickets"));
     if (storedTickets) {
-      setTickets(JSON.parse(storedTickets));
+      setTickets(storedTickets);
     }
+    setNumberOfTickets(storedTickets.length);
   }, [ticketAddedTrigger]);
+
+  // Define a function to render the status cell with color based on status value
+  const renderStatusCell = (params) => {
+    let color = "black"; // Default font color
+
+    switch (params.value) {
+      case "Open":
+        color = "#32c8f2"; // Blue color for Open status
+        break;
+      case "Closed":
+        color = "green"; // Green color for Closed status
+        break;
+      default:
+        color = "red"; // Red color for other statuses
+    }
+    return (
+      <span
+        style={{
+          color,
+          fontWeight: "bold", // Bold font for Open status
+        }}
+      >
+        {params.value}
+      </span>
+    );
+  };
 
   //  Column names or header of the table
   const columns = [
@@ -34,7 +63,12 @@ export default function TicketsList() {
     { field: "subject", headerName: "Subject", width: 350 },
     { field: "priority", headerName: "Priority", width: 150 },
     { field: "category", headerName: "Category", width: 150 },
-    { field: "status", headerName: "Status", width: 150 },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 150,
+      renderCell: renderStatusCell,
+    },
   ];
 
   const handleRowClick = (params) => {
@@ -42,6 +76,15 @@ export default function TicketsList() {
   };
 
   const dispatch = useDispatch();
+
+  // Function to filter rows based on search query
+  const filteredRows = tickets.filter((row) =>
+    Object.values(row).some(
+      (value) =>
+        typeof value === "string" &&
+        value.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
 
   return (
     <>
@@ -55,16 +98,39 @@ export default function TicketsList() {
           Add new ticket
         </button>
       </div>
+      <div className="statsContainer borderStyle">
+        <div className="detailsContainer">
+          <p className="detailHead">Tickets</p>
+          <p className="statsInfo">{numberOfTcikets}</p>
+        </div>
+      </div>
       <div className="borderStyle">
-        <DataGrid
-          rows={tickets}
-          columns={columns}
-          checkboxSelection
-          disableRowSelectionOnClick
-          onRowClick={handleRowClick}
-        />
+        <div className="search-container">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search"
+          />
+        </div>
       </div>
 
+      <div className="borderStyle">
+        {filteredRows.length === 0 ? (
+          <div className="no-results">
+            <img src={require("../Images/pagenotfound.jpg")} width={200} height={200} alt="no results"/>
+            <p>No results found.</p>
+          </div>
+        ) : (
+          <DataGrid
+            rows={filteredRows}
+            columns={columns}
+            checkboxSelection
+            disableRowSelectionOnClick
+            onRowClick={handleRowClick}
+          />
+        )}
+      </div>
       {selectedTicketData && <TicketDetails ticket={selectedTicketData} />}
       {selectedAddTicket && <CreateTicket />}
     </>

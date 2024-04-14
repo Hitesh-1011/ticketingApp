@@ -1,20 +1,12 @@
 import "./App.css";
 import TicketsList from "./Components/ticketsList";
-
-import { setTickets } from "./reducer";
-import { useDispatch } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const dispatch = useDispatch();
-
-  // Load data from local storage when component mounts
-  const storedTickets = localStorage.getItem("tickets");
-
-  if (storedTickets) {
-    dispatch(setTickets(storedTickets));
-  }
   return (
     <>
+      <ToastContainer position="top-right" autoClose={3000} />
       <TicketsList />
     </>
   );

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { setSelectedAddTicket } from "../reducer.js";
 import { setTicketAddedTigger } from "../reducer.js";
 import { useSelector, useDispatch } from "react-redux";
 import closeImg from "../Images/cross-svgrepo-com.svg";
+import { toast } from "react-toastify";
 
 export default function CreateTicket() {
   const tickets = JSON.parse(localStorage.getItem("tickets"));
@@ -14,10 +15,20 @@ export default function CreateTicket() {
   const [ticketData, setTicketData] = useState({
     ticketid: "",
     subject: "",
-    priority: "Low",
-    category: "Incident",
+    priority: "",
+    category: "",
     status: "Open", // Default status
   });
+
+  useEffect(() => {
+    const lastTicketId =
+      tickets.length > 0 ? tickets[tickets.length - 1].id : 0;
+    const nextTicketId = lastTicketId + 1;
+    setTicketData((prevData) => ({
+      ...prevData,
+      ticketid: `#TC-${nextTicketId.toString().padStart(3, "0")}`,
+    }));
+  }, [tickets]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,6 +50,8 @@ export default function CreateTicket() {
     ];
     // console.log("updatedTickets", tickets, ticketData);
     localStorage.setItem("tickets", JSON.stringify(updatedTickets));
+    toast.success("Ticket added successfully!");
+    onClose();
     setTicketData({
       ticketid: "",
       subject: "",
@@ -83,6 +96,7 @@ export default function CreateTicket() {
               value={ticketData.ticketid}
               onChange={handleChange}
               required
+              readOnly // Make the input non-editable
             />
             <label>Subject:</label>
             <input
@@ -92,29 +106,37 @@ export default function CreateTicket() {
               onChange={handleChange}
               required
             />
-            <label>Priority:</label>
-            <select
-              name="priority"
-              value={ticketData.priority}
-              onChange={handleChange}
-              required
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <label>Category:</label>
-            <select
-              name="category"
-              value={ticketData.category}
-              onChange={handleChange}
-              required
-            >
-              <option value="Incident">Incident</option>
-              <option value="Suggestion">Suggestion</option>
-              <option value="Question">Question</option>
-              {/* Add more categories as needed */}
-            </select>
+            <div className="d-flex gap1">
+              <div className="flex1">
+                <label>Priority:</label>
+                <select
+                  name="priority"
+                  value={ticketData.priority}
+                  onChange={handleChange}
+                  required
+                >
+                  <option selected disabled></option>
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+              <div className="flex1">
+                <label>Category:</label>
+                <select
+                  name="category"
+                  value={ticketData.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option selected disabled></option>
+                  <option value="Incident">Incident</option>
+                  <option value="Suggestion">Suggestion</option>
+                  <option value="Question">Question</option>
+                  {/* Add more categories as needed */}
+                </select>
+              </div>
+            </div>
             <div className="marginTop1">
               <button className="addNewTicket" type="submit">
                 Add Ticket
