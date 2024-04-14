@@ -1,17 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import closeImg from "../Images/cross-svgrepo-com.svg";
 import { setSelectedTicket } from "../reducer.js";
 import { useSelector, useDispatch } from "react-redux";
+import { setTicketAddedTigger } from "../reducer.js";
+import { toast } from "react-toastify";
 
 export default function TicketDetails({ ticket }) {
   const selectedTicketData = useSelector(
     (state) => state.ticketsStateManager.selectedTicket
   );
 
+  const ticketAddedTrigger = useSelector(
+    (state) => state.ticketsStateManager.ticketAddedTigger
+  );
+
   const dispatch = useDispatch();
 
   const onClose = () => {
     dispatch(setSelectedTicket(""));
+  };
+
+  const [selectedStatus, setSelectedStatus] = useState(ticket.status);
+
+  const handleChange = (e) => {
+    dispatch(setTicketAddedTigger(ticketAddedTrigger + 1));
+    const newStatus = e.target.value;
+    setSelectedStatus(newStatus);
+    toast.success("Ticket Updated successfully!");
+    onClose();
+    // Update local storage
+    const ticketsFromStorage = JSON.parse(localStorage.getItem("tickets"));
+    const updatedTickets = ticketsFromStorage.map((t) =>
+      t.id === ticket.id ? { ...t, status: newStatus } : t
+    );
+    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
   };
   return (
     <>
@@ -31,11 +53,46 @@ export default function TicketDetails({ ticket }) {
               onClick={onClose}
             />
           </div>
-          <p>Ticket ID: {ticket.ticketid}</p>
-          <p>Subject: {ticket.subject}</p>
-          <p>Priority: {ticket.priority}</p>
-          <p>Category: {ticket.category}</p>
-          <p>Status: {ticket.status}</p>
+          <div className="ticketsDetailsSection">
+            <p className="ticketid">{ticket.ticketid}</p>
+            <p className="ticketName">{ticket.subject}</p>
+            <select
+              name="category"
+              value={selectedStatus}
+              onChange={handleChange}
+              required
+              className="bgDownArrow"
+              style={{
+                backgroundColor:
+                  selectedStatus === "Open"
+                    ? "#32c8f2"
+                    : selectedStatus === "Closed"
+                    ? "orange"
+                    : selectedStatus === "Terminated"
+                    ? "red"
+                    : "white", // Default background color if none of the conditions match
+                color: "white", // Text color to ensure visibility
+              }}
+            >
+              <option selected disabled>
+                {selectedStatus}
+              </option>
+              <option value="Open">Open</option>
+              <option value="Closed">Close</option>
+              <option value="Terminated">Terminate</option>
+              {/* Add more categories as needed */}
+            </select>
+          </div>
+          <div className="ticketsDetailsSectionBelow">
+            <div className="priorityTab">
+              <p className="detailsHead">Priority</p>
+              <p className="detailsStat">{ticket.priority}</p>
+            </div>
+            <div className="categoryTab">
+              <p className="detailsHead">Category</p>
+              <p className="detailsStat">{ticket.category}</p>
+            </div>
+          </div>
         </div>
       </div>
     </>

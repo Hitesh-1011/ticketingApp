@@ -3,6 +3,29 @@
   margin: 1rem;
 }
 
+.borderStyle input {
+  border-radius: 4px;
+  padding: 0.5rem 0.5rem 0.5rem 2rem;
+  border: 1px solid #e3e3e3;
+  appearance: none;
+  background-image: url("./Images/icon-search.svg"); /* Optionally, you can use a custom down arrow image */
+  background-size: 14px;
+  background-repeat: no-repeat;
+  background-position: 8px center; /* Position the arrow to the right */
+  width: 200px;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 400px;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+}
+
 /* Tickets details tab css */
 .ticket-details {
   width: fit-content;
@@ -69,6 +92,8 @@
   cursor: pointer !important;
 }
 
+/*  */
+
 /* add-ticket-container */
 
 .add-ticket-container label,
@@ -101,15 +126,133 @@
   width: calc(100% - 2 * 0.65rem);
   padding: 0.375rem 0.5rem;
   margin-bottom: 1rem;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
 }
 
 .add-ticket-container select {
   width: 100%;
   padding: 0.375rem 0.5rem;
   margin-bottom: 1rem;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
 }
 
 .add-ticket-container {
   display: inline-block;
 }
+/*  */
+
+/* statsContainer */
+
+.statsContainer {
+  padding: 0rem 1rem;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+}
+
+.detailsContainer {
+  font-size: 16px;
+  line-height: normal;
+  margin-bottom: 0.25rem !important;
+}
+
+.statsInfo {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: normal;
+  margin-top: -0.5rem;
+  margin-bottom: 0.875rem;
+}
+
+/*  */
+
+/* ticketsDetailsSection */
+
+.ticketsDetailsSection {
+  display: flex;
+  border: 1px solid #e3e3e3;
+  padding: 0 1rem;
+  border-radius: 4px;
+  align-items: center;
+}
+
+.ticketsDetailsSectionBelow {
+  display: flex;
+  border-top: none;
+  border-radius: 4px;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ticketsDetailsSection .ticketid {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ticketsDetailsSection .ticketName {
+  font-size: 16px;
+}
+
+.ticketsDetailsSection p:not(:last-child) {
+  padding-right: 0.5rem;
+  margin-right: 0.5rem;
+  border-right: 1px solid #e3e3e3;
+}
+
+.ticketsDetailsSection select {
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 16px;
+  color: #fff;
+  padding: 0.375rem 0.5rem;
+}
+
+.priorityTab,
+.categoryTab {
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  flex: 1;
+  padding: 0 1rem;
+  margin-top: 1rem;
+}
+
+.detailsHead {
+  font-size: 14px;
+  line-height: normal;
+  color: #8b8b8b;
+  margin-bottom: 0;
+}
+
+.detailsStat {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin-top: 0.5rem;
+}
+
+.bgDownArrow {
+  appearance: none;
+  -webkit-appearance: none; /* For Safari */
+  -moz-appearance: none; /* For Firefox */
+  background-color: transparent; /* Make the background transparent */
+  background-image: url("./Images/down-arrow.svg"); /* Optionally, you can use a custom down arrow image */
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: calc(100% - 0.5rem) center; /* Position the arrow to the right */
+  width: 110px;
+}
+
+/*  */
+
+/* Media Queries */
+
+@media only screen and (max-width: 576px) {
+  .ticket-details {
+    min-width: 80% !important;
+    width: 100%;
+  }
+}
+
 /*  */
