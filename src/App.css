@@ -84,11 +84,11 @@
   cursor: pointer;
 }
 
-.css-qcqlck-MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+.MuiDataGrid-cell:focus-within {
   outline: none !important;
 }
 
-.css-qcqlck-MuiDataGrid-root .MuiDataGrid-cell {
+.MuiDataGrid-cell {
   cursor: pointer !important;
 }
 
