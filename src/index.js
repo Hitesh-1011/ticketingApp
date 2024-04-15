@@ -33,12 +33,13 @@ const initialTicketData = [
   },
 ];
 
+// get initial rows present in local storage
 const storedTickets = localStorage.getItem("tickets");
 
 if (storedTickets === null) {
+  // Store initial rows in local storage only if no tickets is present
   localStorage.setItem("tickets", JSON.stringify(initialTicketData));
 }
-// Store initial rows in local storage
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

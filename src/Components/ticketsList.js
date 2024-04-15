@@ -22,6 +22,12 @@ export default function TicketsList() {
     (state) => state.ticketsStateManager.ticketAddedTigger
   );
 
+  // Filter the tickets to get only the open tickets
+  const openTickets = tickets.filter((ticket) => ticket.status === "Open");
+
+  // Get the number of open tickets
+  const numberOfOpenTickets = openTickets.length;
+
   useEffect(() => {
     // Load data from local storage when component mounts
     const storedTickets = JSON.parse(localStorage.getItem("tickets"));
@@ -100,8 +106,12 @@ export default function TicketsList() {
       </div>
       <div className="statsContainer borderStyle">
         <div className="detailsContainer">
-          <p className="detailHead">Tickets</p>
+          <p className="detailHead">TICKETS</p>
           <p className="statsInfo">{numberOfTcikets}</p>
+        </div>
+        <div className="detailsContainer">
+          <p className="detailHead">OVERDUE TICKET</p>
+          <p className="statsInfo">{numberOfOpenTickets}</p>
         </div>
       </div>
       <div className="borderStyle">
@@ -118,7 +128,12 @@ export default function TicketsList() {
       <div className="borderStyle">
         {filteredRows.length === 0 ? (
           <div className="no-results">
-            <img src={require("../Images/pagenotfound.jpg")} width={200} height={200} alt="no results"/>
+            <img
+              src={require("../Images/pagenotfound.jpg")}
+              width={200}
+              height={200}
+              alt="no results"
+            />
             <p>No results found.</p>
           </div>
         ) : (
